@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+<h1>Employee  Document Dashboard</h1>
+
+<a href="{% url 'add_employee' %}">Add Employee</a>
+<br>
+<a href="{% url 'add_document' %}">Add_document</a>
+
+<h2>Employees</h2>
+<!--Listing FO employees-->
+<h3>FRONT OFFICE (FO)</h3>
+<ul>
+{% for employee in employees %}
+    {% if employee.department == "FO" %}
+        <li>{{ employee.name }} - {{ employee.department }}
+            <a href="{% url 'edit_employee' employee.id %}">Edit</a>
+            <a href="{% url 'delete_employee' employee.id %}" onclick="return confirm('Delete this employee?')">Delete</a>
+        </li>
+    {% endif %}
+{% empty %}
+    <li>No employees in this department.</li>
+{% endfor %}
+</ul>
+
+<!--Listing FMEs-->
+<h3>FIELD MAINTENANCE ENGINEERS (FME)</h3>
+<ul>
+{% for employee in employees %}
+    {% if employee.department == "FME" %}
+        <li>{{ employee.name }} - {{ employee.department }}
+            <a href="{% url 'edit_employee' employee.id %}">Edit</a>
+            <a href="{% url 'delete_employee' employee.id %}" onclick="return confirm('Delete this employee?')">Delete</a>
+        </li>
+    {% endif %}
+{% empty %}
+    <li>No employee in this department</li>
+{% endfor %}
+</ul>
+<!--Listing BO employees-->
+<h3>BACK OFFICE (BO)</h3>
+<ul>
+{% for employee in employees %}
+    {% if employee.department == "BO" %}
+        <li>{{ employee.name }} - {{ employee.department }}
+            <a href="{% url 'edit_employee' employee.id %}">Edit</a>
+            <a href="{% url 'delete_employee' employee.id %}" onclick="return confirm('Delete this employee?')">Delete</a>
+        </li>
+    {% endif %}
+{% empty %}
+    <li>No employee in this department.</li>
+{% endfor %}
+</ul>
+
+
+
+<h2>Documents</h2>
+
+<h3>Please search employee to see documents and status</h3>
+
+<form method="get" class="mb-3">
+    <input type="text" name="query" placeholder="search..." value="{{ query|default:'' }}" required>
+    <button type="submit">Search</button>
+    {% if query %}
+        <a href="{% url 'dashboard' %}">Clear</a>
+    {% endif %}
+</form>
+<h3>Documents</h3>
+<ul>
+{% for document in documents %}
+    <li>{{ document.title }} - {{ document.status }}
+        {% if document.file %}| <a href="{{document.file.url }}" target="_blank">View {{ document.title }}</a>
+        {% else %}| No file
+        {% endif %}
+
+    <a href="{% url 'edit_document' document.id %}">Edit</a>
+    <a href="{% url 'delete_document' document.id %}" onclick="return confirm('Delete this Document?')">Delete</a></li>
+{% empty %}
+    <li>No documents found.</li>
+{% endfor %}
+
+</ul>
+</body>
+</html>
